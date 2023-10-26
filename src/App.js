@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ParticlesBg from 'particles-bg';
-//import Clarifai from 'clarifai';
 import Navigation from './components/Navigation/Navigation';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
@@ -10,11 +9,8 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import './App.css';
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      input: '',
+const initialState = {
+  input: '',
       imageUrl: '',
       box: {},
       route: 'signin',
@@ -26,7 +22,12 @@ class App extends Component {
         entries: 0,
         joined: ''
       }
-    }
+}
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = initialState;
   }
 
   loadUser = (data) => {
@@ -115,7 +116,6 @@ const requestOptions = {
 
 fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", requestOptions)
     .then(response => response.json())
-    //.then(result => this.displayFaceBox(this.calculateFaceLocation(result)))
     .then(result => {
       if (result) {
         fetch('http://localhost:3000/image', {
@@ -127,16 +127,19 @@ fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", requestOpti
       })
       .then(response => response.json())
       .then(count => {
-        this.setState(Object.assign(this.state.user, { entries: count}))
+        console.log(count)
+        this.setState(Object.assign(this.state.user, count))
       })
+      .catch(console.log)
+      }
       this.displayFaceBox(this.calculateFaceLocation(result))
-      }})
+      })
     .catch(error => console.log('error', error));
   }
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({isSignedIn: false})
+      this.setState(initialState)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }

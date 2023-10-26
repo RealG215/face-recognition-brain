@@ -18,7 +18,7 @@ class Signin extends React.Component {
     this.setState({signInPassword: event.target.value})
   }
 
-  /*onSubmitSignIn = () => {
+  onSubmitSignIn = () => {
     fetch('http://localhost:3000/signin', {
       method: 'post',
       headers: {'Content-Type': 'application/json'},
@@ -34,30 +34,7 @@ class Signin extends React.Component {
           this.props.onRouteChange('home');
         }
       })
-  }*/
-
-  onSubmitSignIn = () => {
-  fetch('http://localhost:3000/signin', {
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email: this.state.signInEmail,
-      password: this.state.signInPassword
-    })
-  })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      if (data === 'success') {
-        this.props.loadUser(data);
-        this.props.onRouteChange('home');
-      } else {
-
-        console.log('Login failed');
-      }
-    })
-    .catch(error => console.log('Error:', error));
-}
+  }
 
   render() {
     const { onRouteChange } = this.props;
